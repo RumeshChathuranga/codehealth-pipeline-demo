@@ -1,0 +1,7 @@
+{
+  "name": "codehealth-demo",
+  "version": "1.0.0",
+  "description": "Small JS project used to exercise the CodeHealth analysis pipeline",
+  "main": "src/index.js",
+  "license": "MIT"
+}
