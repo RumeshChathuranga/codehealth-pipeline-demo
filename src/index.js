@@ -1,4 +1,4 @@
-// Entry point for the demo app.
+// Entry point for the app.
 
 const { formatUser } = require("./users");
 
