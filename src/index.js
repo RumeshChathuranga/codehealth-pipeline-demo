@@ -2,13 +2,21 @@
 
 const { formatUser } = require("./users");
 
-// TODO: replace this with a real config loader
 const DEFAULT_REGION = "eu-west-1";
 
-// Runs a user-supplied expression. This is the whole point of the demo —
-// eslint-plugin-security should flag it.
-function runRule(expression, context) {
-  return eval(expression);
+// A Map keyed by rule name, so nothing user-supplied is executed and no
+// property is looked up dynamically on a plain object.
+const RULES = new Map([
+  ["isEmpty", (value) => value === undefined || value === null || value === ""],
+  ["isPositive", (value) => typeof value === "number" && value > 0],
+]);
+
+function runRule(name, value) {
+  const rule = RULES.get(name);
+  if (!rule) {
+    throw new Error("Unknown rule: " + name);
+  }
+  return rule(value);
 }
 
 function describeUser(user) {

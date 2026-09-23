@@ -1,40 +1,28 @@
-// Report builders. buildTeamReport was copy-pasted from buildAccountReport,
-// which is exactly the kind of duplication the analyser should catch.
+// Report builders.
 
-function buildAccountReport(entity) {
-  const lines = [];
-  lines.push("== Report ==");
-  lines.push("identifier : " + entity.id);
-  lines.push("display    : " + entity.displayName);
-  lines.push("plan       : " + entity.plan);
-  lines.push("region     : " + entity.region);
-  lines.push("seats      : " + entity.seats);
-  lines.push("active     : " + entity.active);
-  lines.push("owner      : " + entity.ownerEmail);
-  lines.push("created    : " + entity.createdAt);
-  lines.push("updated    : " + entity.updatedAt);
-  lines.push("billing    : " + entity.billingRef);
-  lines.push("tier       : " + entity.tier);
+// Each field reads its own value, so there is no dynamic property access.
+const FIELDS = [
+  ["identifier", (e) => e.id],
+  ["display", (e) => e.displayName],
+  ["plan", (e) => e.plan],
+  ["region", (e) => e.region],
+  ["seats", (e) => e.seats],
+  ["active", (e) => e.active],
+  ["owner", (e) => e.ownerEmail],
+  ["created", (e) => e.createdAt],
+  ["updated", (e) => e.updatedAt],
+  ["billing", (e) => e.billingRef],
+  ["tier", (e) => e.tier],
+];
+
+// Accounts and teams share a shape, so they share one builder.
+function buildReport(entity) {
+  const lines = ["== Report =="];
+  for (const [label, read] of FIELDS) {
+    lines.push(label.padEnd(11) + ": " + read(entity));
+  }
   lines.push("------------");
   return lines.join("\n");
 }
 
-function buildTeamReport(entity) {
-  const lines = [];
-  lines.push("== Report ==");
-  lines.push("identifier : " + entity.id);
-  lines.push("display    : " + entity.displayName);
-  lines.push("plan       : " + entity.plan);
-  lines.push("region     : " + entity.region);
-  lines.push("seats      : " + entity.seats);
-  lines.push("active     : " + entity.active);
-  lines.push("owner      : " + entity.ownerEmail);
-  lines.push("created    : " + entity.createdAt);
-  lines.push("updated    : " + entity.updatedAt);
-  lines.push("billing    : " + entity.billingRef);
-  lines.push("tier       : " + entity.tier);
-  lines.push("------------");
-  return lines.join("\n");
-}
-
-module.exports = { buildAccountReport, buildTeamReport };
+module.exports = { buildReport };
